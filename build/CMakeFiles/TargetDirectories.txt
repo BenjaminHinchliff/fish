@@ -1,5 +1,0 @@
-/mnt/c/Users/benja/source/repos/fish/build/CMakeFiles/rebuild_cache.dir
-/mnt/c/Users/benja/source/repos/fish/build/CMakeFiles/edit_cache.dir
-/mnt/c/Users/benja/source/repos/fish/build/src/CMakeFiles/rebuild_cache.dir
-/mnt/c/Users/benja/source/repos/fish/build/src/CMakeFiles/edit_cache.dir
-/mnt/c/Users/benja/source/repos/fish/build/src/CMakeFiles/fish.dir

@@ -1,3 +1,0 @@
-repository='https://github.com/wmcbrine/PDCurses.git'
-module=''
-tag='origin'

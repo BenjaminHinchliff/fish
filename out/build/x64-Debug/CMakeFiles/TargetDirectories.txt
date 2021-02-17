@@ -1,6 +1,0 @@
-C:/Users/benja/source/repos/fish/out/build/x64-Debug/CMakeFiles/edit_cache.dir
-C:/Users/benja/source/repos/fish/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir
-C:/Users/benja/source/repos/fish/out/build/x64-Debug/src/CMakeFiles/fish.dir
-C:/Users/benja/source/repos/fish/out/build/x64-Debug/src/CMakeFiles/pdcurses_build.dir
-C:/Users/benja/source/repos/fish/out/build/x64-Debug/src/CMakeFiles/edit_cache.dir
-C:/Users/benja/source/repos/fish/out/build/x64-Debug/src/CMakeFiles/rebuild_cache.dir

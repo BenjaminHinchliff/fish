@@ -1,4 +1,0 @@
-# ninja log v5
-1	326	635222427	src/CMakeFiles/fish.dir/main.cpp.obj	84989cb98b9fff16
-3	2012	635222429	_deps/pdcurses-src/wincon/pdcurses.lib	bee780ceaffbdc76
-2012	2241	635222429	src/fish.exe	1c950d9184bf3aac
