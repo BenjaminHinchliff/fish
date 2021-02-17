@@ -1,0 +1,14 @@
+# Target labels
+ pdcurses-populate
+# Source files and their labels
+C:/Users/benja/source/repos/fish/out/build/x64-Release/_deps/pdcurses-subbuild/CMakeFiles/pdcurses-populate
+C:/Users/benja/source/repos/fish/out/build/x64-Release/_deps/pdcurses-subbuild/CMakeFiles/pdcurses-populate.rule
+C:/Users/benja/source/repos/fish/out/build/x64-Release/_deps/pdcurses-subbuild/CMakeFiles/pdcurses-populate-complete.rule
+C:/Users/benja/source/repos/fish/out/build/x64-Release/_deps/pdcurses-subbuild/pdcurses-populate-prefix/src/pdcurses-populate-stamp/pdcurses-populate-install.rule
+C:/Users/benja/source/repos/fish/out/build/x64-Release/_deps/pdcurses-subbuild/pdcurses-populate-prefix/src/pdcurses-populate-stamp/pdcurses-populate-mkdir.rule
+C:/Users/benja/source/repos/fish/out/build/x64-Release/_deps/pdcurses-subbuild/pdcurses-populate-prefix/src/pdcurses-populate-stamp/pdcurses-populate-download.rule
+C:/Users/benja/source/repos/fish/out/build/x64-Release/_deps/pdcurses-subbuild/pdcurses-populate-prefix/src/pdcurses-populate-stamp/pdcurses-populate-update.rule
+C:/Users/benja/source/repos/fish/out/build/x64-Release/_deps/pdcurses-subbuild/pdcurses-populate-prefix/src/pdcurses-populate-stamp/pdcurses-populate-patch.rule
+C:/Users/benja/source/repos/fish/out/build/x64-Release/_deps/pdcurses-subbuild/pdcurses-populate-prefix/src/pdcurses-populate-stamp/pdcurses-populate-configure.rule
+C:/Users/benja/source/repos/fish/out/build/x64-Release/_deps/pdcurses-subbuild/pdcurses-populate-prefix/src/pdcurses-populate-stamp/pdcurses-populate-build.rule
+C:/Users/benja/source/repos/fish/out/build/x64-Release/_deps/pdcurses-subbuild/pdcurses-populate-prefix/src/pdcurses-populate-stamp/pdcurses-populate-test.rule

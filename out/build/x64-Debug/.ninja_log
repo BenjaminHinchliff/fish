@@ -1,0 +1,8 @@
+# ninja log v5
+3	453	635222405	src/CMakeFiles/fish.dir/main.cpp.obj	dbdd75c90e55d
+0	2026	635222407	_deps/pdcurses-src/wincon/pdcurses.lib	db5302bd7690cd97
+2027	2258	635222407	src/fish.exe	1c950d9184bf3aac
+0	6	0	clean	9992afb1f91dc381
+4	57	635222535	_deps/pdcurses-src/wincon/pdcurses.lib	db5302bd7690cd97
+1	425	635222536	src/CMakeFiles/fish.dir/main.cpp.obj	dbdd75c90e55d
+425	550	635222536	src/fish.exe	1c950d9184bf3aac

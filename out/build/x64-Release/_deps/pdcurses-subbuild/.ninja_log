@@ -1,0 +1,19 @@
+# ninja log v5
+0	153	635222419	pdcurses-populate-prefix/src/pdcurses-populate-stamp/pdcurses-populate-mkdir	1be2b0aa4218c051
+153	4269	635222423	pdcurses-populate-prefix/src/pdcurses-populate-stamp/pdcurses-populate-download	7c008dc96929253c
+4269	4365	0	pdcurses-populate-prefix/src/pdcurses-populate-stamp/pdcurses-populate-update	d3b2be2938619435
+4365	4409	635222423	pdcurses-populate-prefix/src/pdcurses-populate-stamp/pdcurses-populate-patch	a53e4aaa83c3fa1b
+4409	4450	635222423	pdcurses-populate-prefix/src/pdcurses-populate-stamp/pdcurses-populate-configure	ffa03728b20d927f
+4450	4494	635222423	pdcurses-populate-prefix/src/pdcurses-populate-stamp/pdcurses-populate-build	e38d8d8680d74ea5
+4494	4536	635222423	pdcurses-populate-prefix/src/pdcurses-populate-stamp/pdcurses-populate-install	31d402eb4c19544c
+4536	4579	635222423	pdcurses-populate-prefix/src/pdcurses-populate-stamp/pdcurses-populate-test	a81a190d3dc28dbd
+4579	4638	635222423	CMakeFiles/pdcurses-populate-complete	875897961267b792
+4579	4638	635222423	pdcurses-populate-prefix/src/pdcurses-populate-stamp/pdcurses-populate-done	875897961267b792
+1	92	0	pdcurses-populate-prefix/src/pdcurses-populate-stamp/pdcurses-populate-update	d3b2be2938619435
+92	134	635222526	pdcurses-populate-prefix/src/pdcurses-populate-stamp/pdcurses-populate-patch	a53e4aaa83c3fa1b
+134	176	635222526	pdcurses-populate-prefix/src/pdcurses-populate-stamp/pdcurses-populate-configure	ffa03728b20d927f
+176	218	635222526	pdcurses-populate-prefix/src/pdcurses-populate-stamp/pdcurses-populate-build	e38d8d8680d74ea5
+218	261	635222526	pdcurses-populate-prefix/src/pdcurses-populate-stamp/pdcurses-populate-install	31d402eb4c19544c
+261	308	635222526	pdcurses-populate-prefix/src/pdcurses-populate-stamp/pdcurses-populate-test	a81a190d3dc28dbd
+308	366	635222526	CMakeFiles/pdcurses-populate-complete	875897961267b792
+308	366	635222526	pdcurses-populate-prefix/src/pdcurses-populate-stamp/pdcurses-populate-done	875897961267b792
