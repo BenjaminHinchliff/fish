@@ -4,6 +4,11 @@
 
 int main()
 {
-	std::cout << "Hello CMake." << '\n';
-	return 0;
+  initscr();
+  printw("Hello Curses!!!");
+  refresh();
+  getch();
+  endwin();
+  
+  return 0;
 }
