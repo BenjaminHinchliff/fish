@@ -1,6 +1,13 @@
 ﻿cmake_minimum_required(VERSION 3.11)
 
-add_executable(fish "main.cpp")
+set(FISH_HDRS
+	"fish.hpp")
+
+set(FISH_SRCS
+	"fish.cpp"
+	"main.cpp")
+
+add_executable(fish ${FISH_HDRS} ${FISH_SRCS})
 
 if(MSVC)
 	find_package(PDCurses REQUIRED)
