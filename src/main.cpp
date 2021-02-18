@@ -63,14 +63,13 @@ Fish::Fish(const std::string &source) {
   std::random_device rd;
   gen = std::mt19937(rd());
   boost::split(grid, source, [](char c) { return c == '\n'; });
-  size = std::make_pair(
-      static_cast<int>(
-          std::max_element(grid.begin(), grid.end(),
-                           [](const std::string &a, const std::string &b) {
-                             return a.length() < b.length();
-                           })
-              ->length()),
-      static_cast<int>(grid.size()));
+  int width = static_cast<int>(grid.size());
+  auto largest_row = std::max_element(
+      grid.begin(), grid.end(), [](const std::string &a, const std::string &b) {
+        return a.length() < b.length();
+      });
+  int height = static_cast<int>(largest_row->length());
+  size = std::make_pair(width, height);
 }
 
 const std::vector<std::string> &Fish::getGrid() const { return grid; }
