@@ -2,9 +2,6 @@
 
 add_executable(fish "main.cpp")
 
-find_package(Boost REQUIRED)
-target_include_directories(fish PUBLIC ${Boost_INCLUDE_DIRS})
-
 if(MSVC)
 	find_package(PDCurses REQUIRED)
 	target_link_libraries(fish PUBLIC pdcurses)

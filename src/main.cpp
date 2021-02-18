@@ -5,9 +5,7 @@
 #include <random>
 #include <string>
 #include <vector>
-
-// TODO: remove boost dep by hand-rolling this
-#include <boost/algorithm/string.hpp>
+#include <functional>
 
 #include <curses.h>
 
@@ -30,6 +28,8 @@ private:
   constexpr int pos_modulo(int i, int n) const noexcept {
     return (i % n + n) % n;
   }
+  std::vector<std::string> split(const std::string &source,
+                                 const std::string &delim);
 
 private:
   using directions_t = std::map<char, std::pair<int, int>>;
@@ -62,13 +62,13 @@ private:
 Fish::Fish(const std::string &source) {
   std::random_device rd;
   gen = std::mt19937(rd());
-  boost::split(grid, source, [](char c) { return c == '\n'; });
-  int width = static_cast<int>(grid.size());
+  grid = split(source, "\n");
+  int height = static_cast<int>(grid.size());
   auto largest_row = std::max_element(
       grid.begin(), grid.end(), [](const std::string &a, const std::string &b) {
         return a.length() < b.length();
       });
-  int height = static_cast<int>(largest_row->length());
+  int width = static_cast<int>(largest_row->length());
   size = std::make_pair(width, height);
 }
 
@@ -145,6 +145,21 @@ void Fish::handle_instruction(char instruction) {
     std::reverse(stack.begin(), stack.end());
   }
 }
+
+std::vector<std::string> Fish::split(const std::string& source,
+  const std::string& delim) {
+  std::vector<std::string> output;
+
+  size_t last = 0;
+  size_t pos = 0;
+  while ((pos = source.find(delim, last)) != std::string::npos) {
+    output.push_back(source.substr(last, pos - last));
+    last = pos + 1;
+  }
+  output.push_back(source.substr(last));
+  return output;
+}
+
 
 const Fish::directions_t Fish::directions = {
     {'^', {0, -1}}, {'>', {1, 0}}, {'v', {0, 1}}, {'<', {-1, 0}}};
