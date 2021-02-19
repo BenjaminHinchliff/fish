@@ -9,6 +9,9 @@ set(FISH_SRCS
 
 add_executable(fish ${FISH_HDRS} ${FISH_SRCS})
 
+find_package(cxxopts REQUIRED)
+target_link_libraries(fish PUBLIC cxxopts)
+
 if(MSVC)
 	find_package(PDCurses REQUIRED)
 	target_link_libraries(fish PUBLIC pdcurses)

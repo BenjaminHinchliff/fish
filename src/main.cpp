@@ -4,6 +4,7 @@
 #include <thread>
 
 #include <curses.h>
+#include <cxxopts.hpp>
 
 #include "fish.hpp"
 
@@ -48,7 +49,26 @@ void renderDebugger(const Fish &fish, std::stringstream &output) {
   refresh();
 }
 
-int main() {
+int main(int argc, char **argv) {
+  cxxopts::Options options("fishpp",
+                           "A Fish Debugger/Interpreter written in c++");
+
+  options.add_options()("h,help", "Print usage")("c,code", "Source code");
+
+  auto result = options.parse(argc, argv);
+
+  if (result.count("help")) {
+    std::cout << options.help() << '\n';
+    return 0;
+  }
+
+  if (!result.count("code")) {
+    std::cout << "Missing required argument: \"code\"" << '\n';
+    std::cout << options.help() << '\n';
+    return 1;
+  }
+  auto source = result["code"].as<std::string>();
+
   initscr();
   curs_set(0);
   cbreak();
@@ -56,12 +76,8 @@ int main() {
   nodelay(stdscr, true);
   keypad(stdscr, true);
 
-  std::string test_source =
-      R"("hello, world"r\
-          o;!?l<)";
-
   std::stringstream output;
-  Fish fish(test_source, output);
+  Fish fish(source, output);
 
   // first render
   renderDebugger(fish, output);
