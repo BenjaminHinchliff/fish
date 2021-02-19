@@ -51,6 +51,9 @@ private:
                std::function<std::pair<int, int>(const std::pair<int, int> &)>>;
   static const mirrors_t mirrors;
 
+  using operators_t = std::map<char, std::function<int(int, int)>>;
+  static const operators_t operators;
+
   enum class StringMode {
     OFF,
     DOUBLE_QUOTE,

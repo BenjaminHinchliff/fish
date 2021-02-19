@@ -11,6 +11,7 @@ Fish::Fish(const std::string &source, std::ostream &output) : output(output) {
       });
   int width = static_cast<int>(largest_row->length());
   size = std::make_pair(width, height);
+  handle_instruction(cur_instruction());
 }
 
 const std::vector<std::string> &Fish::getGrid() const { return grid; }
@@ -22,8 +23,8 @@ bool Fish::isCompleted() const { return completed; }
 const Fish::stacks_t &Fish::getStacks() const { return stacks; }
 
 void Fish::step() {
-  handle_instruction(cur_instruction());
   move();
+  handle_instruction(cur_instruction());
 }
 
 char Fish::cur_instruction() const noexcept {
@@ -92,6 +93,15 @@ void Fish::handle_instruction(char instruction) {
     return;
   }
 
+  // test for operators
+  auto ops_it = operators.find(instruction);
+  if (ops_it != operators.end()) {
+    int y = pop();
+    int x = pop();
+    push(ops_it->second(x, y));
+    return;
+  }
+
   // miscellaneous instructions
   switch (instruction) {
   case ':': {
@@ -107,6 +117,12 @@ void Fish::handle_instruction(char instruction) {
       reg().emplace(pop());
     }
     break;
+  case '$': {
+    int a = pop();
+    int b = pop();
+    push(a);
+    push(b);
+  } break;
   case ';':
     completed = true;
     break;
@@ -137,6 +153,9 @@ void Fish::handle_instruction(char instruction) {
       move();
     }
   } break;
+  case 'n':
+    output << pop();
+    break;
   case 'o': {
     int value = pop();
     // TODO: bounds check
@@ -182,6 +201,12 @@ const Fish::mirrors_t Fish::mirrors = {
     {'#', [](const std::pair<int, int> &dir) {
        return std::make_pair(-dir.first, -dir.second);
      }}};
+
+const Fish::operators_t Fish::operators = {
+    {'+', [](int x, int y) { return x + y; }},
+    {'-', [](int x, int y) { return x - y; }},
+    {'*', [](int x, int y) { return x * y; }},
+    {'%', [](int x, int y) { return x % y; }}};
 
 const std::map<char, Fish::StringMode> Fish::modeMap = {
     {'\'', Fish::StringMode::SINGLE_QUOTE},
