@@ -96,7 +96,7 @@ void Fish::handle_instruction(char instruction) {
     auto &stack = stacks.back();
     std::reverse(stack.begin(), stack.end());
   } else if (instruction == 'l') {
-    push(stacks.back().size());
+    push(static_cast<int>(stacks.back().size()));
   } else if (instruction == '!') {
     move();
   } else if (instruction == '?') {
