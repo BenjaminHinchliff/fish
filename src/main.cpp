@@ -110,11 +110,12 @@ int main(int argc, char **argv) {
   constexpr chrono::milliseconds deltaDelay(10);
   auto lastTime = Clock::now();
   const auto &grid = fish.getGrid();
+  bool shouldNoDelay = true;
   bool userEnd = false;
   while (!fish.isCompleted() && !userEnd) {
     auto now = Clock::now();
     auto duration = now - lastTime;
-    if (duration > delay) {
+    if (duration > delay || !shouldNoDelay) {
       lastTime = now;
       renderDebugger(fish, output);
       fish.step();
@@ -133,6 +134,10 @@ int main(int argc, char **argv) {
     case KEY_DOWN:
     case 'j':
       delay -= deltaDelay;
+      break;
+    case 's':
+      shouldNoDelay = !shouldNoDelay;
+      nodelay(stdscr, shouldNoDelay);
       break;
     case KEY_EXIT:
     case 'q':
