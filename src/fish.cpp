@@ -52,7 +52,7 @@ void Fish::move() {
 }
 
 void Fish::handle_instruction(char instruction) {
-
+  // string mode handling
   if (stringMode != StringMode::OFF) {
     auto str_end_it = modeMap.find(instruction);
     if (str_end_it != modeMap.end() && stringMode == str_end_it->second) {
@@ -63,22 +63,34 @@ void Fish::handle_instruction(char instruction) {
     return;
   }
 
+  // test if any string delimiters are there
   auto str_it = modeMap.find(instruction);
   if (str_it != modeMap.end()) {
     stringMode = str_it->second;
     return;
   }
 
+  // test for any of the directional instructions
   auto dir_it = directions.find(instruction);
   if (dir_it != directions.end()) {
     direction = dir_it->second;
     return;
   }
+
+  // test for any of the mirror instructions
   auto mir_it = mirrors.find(instruction);
   if (mir_it != mirrors.end()) {
     direction = mir_it->second(direction);
     return;
   }
+
+  // test for (hex) number
+  if (std::isxdigit(instruction)) {
+    push(std::stoi(std::string(1, instruction), 0, 16));
+    return;
+  }
+
+  // miscellaneous instructions
   switch (instruction) {
   case ';':
     completed = true;
@@ -114,12 +126,6 @@ void Fish::handle_instruction(char instruction) {
     int value = pop();
     // TODO: bounds check
     output << static_cast<char>(value);
-  }
-  default: {
-
-    if (std::isxdigit(instruction)) {
-      push(std::stoi(std::string(1, instruction), 0, 16));
-    }
   } break;
   }
 }
