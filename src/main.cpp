@@ -28,7 +28,8 @@ void renderGrid(const Fish &fish) {
 void renderStacks(const Fish::stacks_t &stacks) {
   printw("Stacks:\n");
   for (size_t i = 0; i < stacks.size(); ++i) {
-    const auto &stack = stacks[i];
+    const auto &fishStack = stacks[i];
+    const auto &stack = fishStack.stack;
     printw("%d: [", i);
     if (stack.size() > 0) {
       for (size_t i = 0; i < stack.size() - 1; ++i) {
@@ -36,7 +37,14 @@ void renderStacks(const Fish::stacks_t &stacks) {
       }
       printw("%d", stack[stack.size() - 1]);
     }
-    printw("]\n");
+    printw("] reg: ");
+    const auto &reg = fishStack.reg;
+    if (reg.has_value()) {
+      printw("%d", *reg);
+    } else {
+      printw("None");
+    }
+    addch('\n');
   }
 }
 

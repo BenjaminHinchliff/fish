@@ -34,17 +34,19 @@ char Fish::cur_instruction() const noexcept {
   }
 }
 
-void Fish::push(int val) { stacks.back().push_back(val); }
+void Fish::push(int val) { stacks.back().stack.push_back(val); }
 
 int Fish::pop() {
   auto &stack = stacks.back();
-  if (stack.empty()) {
+  if (stack.stack.empty()) {
     throw std::runtime_error("unexpected end of stack");
   }
-  int ret = stack.back();
-  stack.pop_back();
+  int ret = stack.stack.back();
+  stack.stack.pop_back();
   return ret;
 }
+
+std::optional<int> &Fish::reg() { return stacks.back().reg; }
 
 void Fish::move() {
   position.first = pos_modulo(position.first + direction.first, size.first);
@@ -92,6 +94,19 @@ void Fish::handle_instruction(char instruction) {
 
   // miscellaneous instructions
   switch (instruction) {
+  case ':': {
+    int val = pop();
+    push(val);
+    push(val);
+  } break;
+  case '&':
+    if (reg().has_value()) {
+      push(*reg());
+      reg().reset();
+    } else {
+      reg().emplace(pop());
+    }
+    break;
   case ';':
     completed = true;
     break;
@@ -107,11 +122,11 @@ void Fish::handle_instruction(char instruction) {
     direction = dir_it->second;
   } break;
   case 'r': {
-    auto &stack = stacks.back();
+    auto &stack = stacks.back().stack;
     std::reverse(stack.begin(), stack.end());
   } break;
   case 'l':
-    push(static_cast<int>(stacks.back().size()));
+    push(static_cast<int>(stacks.back().stack.size()));
     break;
   case '!':
     move();

@@ -8,12 +8,18 @@
 #include <random>
 #include <stdexcept>
 #include <ostream>
+#include <optional>
+
+struct FishStack {
+  std::vector<int> stack;
+  std::optional<int> reg;
+};
 
 class Fish {
 public:
   Fish(const std::string &source, std::ostream &output);
 
-  using stacks_t = std::vector<std::vector<int>>;
+  using stacks_t = std::vector<FishStack>;
 
   const std::vector<std::string> &getGrid() const;
   const std::pair<int, int> &getPosition() const;
@@ -26,6 +32,7 @@ private:
   char cur_instruction() const noexcept;
   void push(int val);
   int pop();
+  std::optional<int> &reg();
   void move();
   void handle_instruction(char instruction);
 
