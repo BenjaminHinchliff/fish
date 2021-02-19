@@ -54,8 +54,8 @@ void Fish::move() {
 void Fish::handle_instruction(char instruction) {
 
   if (stringMode != StringMode::OFF) {
-    auto str_end_it = stringModeMap.find(instruction);
-    if (str_end_it != stringModeMap.end() && stringMode == str_end_it->second) {
+    auto str_end_it = modeMap.find(instruction);
+    if (str_end_it != modeMap.end() && stringMode == str_end_it->second) {
       stringMode = StringMode::OFF;
     } else {
       push(instruction);
@@ -63,8 +63,8 @@ void Fish::handle_instruction(char instruction) {
     return;
   }
 
-  auto str_it = stringModeMap.find(instruction);
-  if (str_it != stringModeMap.end()) {
+  auto str_it = modeMap.find(instruction);
+  if (str_it != modeMap.end()) {
     stringMode = str_it->second;
     return;
   }
@@ -150,7 +150,7 @@ const Fish::mirrors_t Fish::mirrors = {
        return std::make_pair(-dir.first, -dir.second);
      }}};
 
-const std::map<char, Fish::StringMode> Fish::stringModeMap = {
+const std::map<char, Fish::StringMode> Fish::modeMap = {
     {'\'', Fish::StringMode::SINGLE_QUOTE},
     {'"', Fish::StringMode::DOUBLE_QUOTE},
 };

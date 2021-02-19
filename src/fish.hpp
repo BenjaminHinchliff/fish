@@ -50,7 +50,7 @@ private:
     SINGLE_QUOTE,
   };
 
-  static const std::map<char, StringMode> stringModeMap;
+  static const std::map<char, StringMode> modeMap;
 
 private:
   std::vector<std::string> grid;
