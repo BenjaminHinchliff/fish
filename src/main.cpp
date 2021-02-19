@@ -2,6 +2,7 @@
 #include <iostream>
 #include <sstream>
 #include <thread>
+#include <fstream>
 
 #include <curses.h>
 #include <cxxopts.hpp>
@@ -53,7 +54,12 @@ int main(int argc, char **argv) {
   cxxopts::Options options("fishpp",
                            "A Fish Debugger/Interpreter written in c++");
 
-  options.add_options()("h,help", "Print usage")("c,code", "Source code");
+  std::string source;
+  std::string sourceFilePath;
+  options.add_options()("h,help", "Print usage")("c,code", "Source code", cxxopts::value<std::string>(source))(
+      "s,source", "Source files", cxxopts::value<std::string>(sourceFilePath), "SOURCE");
+
+  options.parse_positional({"source"});
 
   auto result = options.parse(argc, argv);
 
@@ -62,12 +68,22 @@ int main(int argc, char **argv) {
     return 0;
   }
 
-  if (!result.count("code")) {
-    std::cout << "Missing required argument: \"code\"" << '\n';
-    std::cout << options.help() << '\n';
+  if (!result.count("code") && !result.count("source")) {
+    std::cerr << "Missing required argument: (code | source)" << '\n';
+    std::cerr << options.help() << '\n';
     return 1;
   }
-  auto source = result["code"].as<std::string>();
+  if (result.count("source")) {
+    std::ifstream sourceFile(sourceFilePath);
+    if (!sourceFile) {
+      std::cerr << "unable to open source file: \"" << sourceFilePath << "\"\n";
+      std::cerr << options.help() << '\n';
+      return 1;
+    }
+    std::stringstream sourceStream;
+    sourceStream << sourceFile.rdbuf();
+    source = sourceStream.str();
+  }
 
   initscr();
   curs_set(0);
