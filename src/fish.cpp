@@ -79,40 +79,53 @@ void Fish::handle_instruction(char instruction) {
     direction = mir_it->second(direction);
     return;
   }
-  if (instruction == ';') {
+  switch (instruction) {
+  case ';':
     completed = true;
-  } else if (instruction == '.') {
+    break;
+  case '.': {
     int y = pop();
     int x = pop();
     position = std::make_pair(x, y);
-  } else if (instruction == 'x') {
+  } break;
+  case 'x': {
     std::uniform_int_distribution<> dis(0, 3);
     dir_it = directions.begin();
     std::advance(dir_it, dis(gen));
     direction = dir_it->second;
-  } else if (std::isxdigit(instruction)) {
-    push(std::stoi(std::string(1, instruction), 0, 16));
-  } else if (instruction == 'r') {
+  } break;
+  case 'r': {
     auto &stack = stacks.back();
     std::reverse(stack.begin(), stack.end());
-  } else if (instruction == 'l') {
+  } break;
+  case 'l':
     push(static_cast<int>(stacks.back().size()));
-  } else if (instruction == '!') {
+    break;
+  case '!':
     move();
-  } else if (instruction == '?') {
+    break;
+  case '?': {
     int value = pop();
     if (value == 0) {
       move();
     }
-  } else if (instruction == 'o') {
+  } break;
+  case 'o': {
     int value = pop();
     // TODO: bounds check
     output << static_cast<char>(value);
   }
+  default: {
+
+    if (std::isxdigit(instruction)) {
+      push(std::stoi(std::string(1, instruction), 0, 16));
+    }
+  } break;
+  }
 }
 
-std::vector<std::string> Fish::split(const std::string& source,
-  const std::string& delim) {
+std::vector<std::string> Fish::split(const std::string &source,
+                                     const std::string &delim) {
   std::vector<std::string> output;
 
   size_t last = 0;
@@ -124,7 +137,6 @@ std::vector<std::string> Fish::split(const std::string& source,
   output.push_back(source.substr(last));
   return output;
 }
-
 
 const Fish::directions_t Fish::directions = {
     {'^', {0, -1}}, {'>', {1, 0}}, {'v', {0, 1}}, {'<', {-1, 0}}};
