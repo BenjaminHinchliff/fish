@@ -109,6 +109,39 @@ void Fish::handle_instruction(char instruction) {
     push(val);
     push(val);
   } break;
+  case '~':
+    pop();
+    break;
+  case '}': {
+    auto &stack = stacks.back().stack;
+    std::rotate(stack.begin(), stack.end() - 1, stack.end());
+  } break;
+  case '{': {
+    auto &stack = stacks.back().stack;
+    std::rotate(stack.begin(), stack.begin() + 1, stack.end());
+  } break;
+  case '@': {
+    auto &stack = stacks.back().stack;
+    auto start = stack.end() - 3;
+    std::rotate(start, stack.end() - 1, stack.end());
+  } break;
+  case '[': {
+    FishStack stack{};
+    int n = static_cast<int>(pop());
+    for (int i = 0; i < n; ++i) {
+      stack.stack.push_back(pop());
+    }
+    stacks.push_back(stack);
+  } break;
+  case ']': {
+    if (stacks.size() == 1) {
+      throw std::runtime_error("can't remove base stack!");
+    }
+    auto &merged = stacks[stacks.size() - 2].stack;
+    auto &merger = stacks.back().stack;
+    merged.insert(merged.end(), merger.begin(), merger.end());
+    stacks.pop_back();
+  } break;
   case '&':
     if (reg().has_value()) {
       push(*reg());
@@ -216,7 +249,10 @@ const Fish::operators_t Fish::operators = {
     {'-', [](double x, double y) { return x - y; }},
     {'*', [](double x, double y) { return x * y; }},
     {'%', [](double x, double y) { return fmod(x, y); }},
-    {',', [](double x, double y) { return x / y; }}};
+    {',', [](double x, double y) { return x / y; }},
+    {'=', [](double x, double y) { return x == y; }},
+    {'(', [](double x, double y) { return y < x; }},
+    {')', [](double x, double y) { return y > x; }}};
 
 const std::map<char, Fish::StringMode> Fish::modeMap = {
     {'\'', Fish::StringMode::SINGLE_QUOTE},
