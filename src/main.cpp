@@ -55,15 +55,18 @@ void renderStacks(const Fish::stacks_t &stacks) {
 
 void renderDebugger(const Fish &fish, std::stringstream &output) {
   move(0, 0);
+  clear();
   renderGrid(fish);
   refresh();
   renderStacks(fish.getStacks());
   refresh();
   std::string outputString = output.str();
   printw("Output:\n");
-  constexpr size_t seg_size = 500;
-  for (size_t i = 0; i < outputString.length() / seg_size + 1; ++i) {
-    printw(outputString.substr(i * seg_size, seg_size).c_str());
+  constexpr size_t seg = 500;
+  size_t len = outputString.length();
+  size_t loops = len != 0 ? ((len - 1) / seg) + 1 : 1;
+  for (size_t i = 0; i < loops; ++i) {
+    printw(outputString.substr(i * seg, seg).c_str());
   }
   addch('\n');
   refresh();
