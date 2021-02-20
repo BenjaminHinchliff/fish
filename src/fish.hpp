@@ -1,14 +1,15 @@
 #ifndef FISH_FISH_HPP
 #define FISH_FISH_HPP
 
-#include <string>
-#include <vector>
-#include <map>
+#include <cmath>
 #include <functional>
+#include <map>
+#include <optional>
+#include <ostream>
 #include <random>
 #include <stdexcept>
-#include <ostream>
-#include <optional>
+#include <string>
+#include <vector>
 
 struct FishStack {
   std::vector<double> stack;
@@ -28,6 +29,9 @@ public:
 
   void step();
 
+  static constexpr double ABS_EPSILON = 1e-12;
+  static constexpr double REL_EPSILON = 1e-8;
+
 private:
   char cur_instruction() const noexcept;
   void push(double val);
@@ -39,6 +43,8 @@ private:
   constexpr int pos_modulo(int i, int n) const noexcept {
     return (i % n + n) % n;
   }
+
+  bool approximatelyEqual(double a, double b) const noexcept;
 
   std::vector<std::string> split(const std::string &source,
                                  const std::string &delim);

@@ -149,7 +149,7 @@ void Fish::handle_instruction(char instruction) {
     break;
   case '?': {
     double value = pop();
-    if (value == 0) {
+    if (approximatelyEqual(value, 0)) {
       move();
     }
   } break;
@@ -162,6 +162,15 @@ void Fish::handle_instruction(char instruction) {
     output << static_cast<char>(value);
   } break;
   }
+}
+
+bool Fish::approximatelyEqual(double a, double b) const noexcept {
+  double diff = std::abs(a - b);
+  if (diff <= ABS_EPSILON) {
+    return true;
+  }
+
+  return diff <= std::max(std::abs(a), std::abs(b)) * REL_EPSILON;
 }
 
 std::vector<std::string> Fish::split(const std::string &source,
