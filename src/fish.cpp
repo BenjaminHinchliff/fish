@@ -1,7 +1,8 @@
 #include "fish.hpp"
 
-Fish::Fish(const std::string &source, std::istream &input, std::ostream &output)
+Fish::Fish(const std::string &source, const std::string &input, const std::string &output)
     : input(input), output(output) {
+  std::reverse(this->input.begin(), this->input.end());
   std::random_device rd;
   gen = std::mt19937(rd());
   grid = split(source, "\n");
@@ -23,14 +24,22 @@ bool Fish::isCompleted() const { return completed; }
 
 const Fish::stacks_t &Fish::getStacks() const { return stacks; }
 
+const std::string& Fish::getInput() const { return input; }
+
+const std::string &Fish::getOutput() const { return output; }
+
 void Fish::step() {
   move();
   handle_instruction(cur_instruction());
 }
 
 char Fish::cur_instruction() const noexcept {
+  return getCell(position.first, position.second);
+}
+
+char Fish::getCell(int x, int y) const noexcept {
   try {
-    return grid.at(position.second).at(position.first);
+    return grid.at(y).at(x);
   } catch (const std::out_of_range &) {
     return ' ';
   }
@@ -39,12 +48,12 @@ char Fish::cur_instruction() const noexcept {
 void Fish::push(double val) { stacks.back().stack.push_back(val); }
 
 double Fish::pop() {
-  auto &stack = stacks.back();
-  if (stack.stack.empty()) {
+  auto &stack = stacks.back().stack;
+  if (stack.empty()) {
     throw std::runtime_error("unexpected end of stack");
   }
-  double ret = stack.stack.back();
-  stack.stack.pop_back();
+  double ret = stack.back();
+  stack.pop_back();
   return ret;
 }
 
@@ -188,12 +197,43 @@ void Fish::handle_instruction(char instruction) {
     }
   } break;
   case 'n':
-    output << pop();
+    output.push_back(pop());
     break;
+  case 'i': {
+    if (!input.empty()) {
+      char c = input.back();
+      input.pop_back();
+      push(c);
+    } else {
+      push(-1);
+    }
+  } break;
   case 'o': {
     double value = pop();
     // TODO: bounds check
-    output << static_cast<char>(value);
+    output.push_back(static_cast<char>(value));
+  } break;
+  case 'g': {
+    int y = static_cast<int>(pop());
+    int x = static_cast<int>(pop());
+    push(getCell(x, y));
+  } break;
+  case 'p': {
+    int y = static_cast<int>(pop());
+    int x = static_cast<int>(pop());
+    char v = static_cast<char>(pop());
+    if (y >= grid.size()) {
+      size.second = y + 1;
+      grid.resize(size.second);
+    }
+    if (x >= grid[y].size()) {
+      int rowWidth = x + 1;
+      if (rowWidth > size.first) {
+        size.first = rowWidth;
+      }
+      grid[y].resize(rowWidth, ' ');
+    }
+    grid[y][x] = v;
   } break;
   }
 }
@@ -252,8 +292,8 @@ const Fish::operators_t Fish::operators = {
     {'%', [](double x, double y) { return fmod(x, y); }},
     {',', [](double x, double y) { return x / y; }},
     {'=', [](double x, double y) { return x == y; }},
-    {'(', [](double x, double y) { return y < x; }},
-    {')', [](double x, double y) { return y > x; }}};
+    {'(', [](double x, double y) { return x < y; }},
+    {')', [](double x, double y) { return x > y; }}};
 
 const std::map<char, Fish::StringMode> Fish::modeMap = {
     {'\'', Fish::StringMode::SINGLE_QUOTE},

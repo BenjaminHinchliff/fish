@@ -19,13 +19,15 @@ struct FishStack {
 
 class Fish {
 public:
-  Fish(const std::string &source, std::istream &input, std::ostream &output);
+  Fish(const std::string &source, const std::string &input, const std::string &output);
 
   using stacks_t = std::vector<FishStack>;
 
   const std::vector<std::string> &getGrid() const;
   const std::pair<int, int> &getPosition() const;
   const stacks_t &getStacks() const;
+  const std::string &getInput() const;
+  const std::string &getOutput() const;
   bool isCompleted() const;
 
   void step();
@@ -35,6 +37,7 @@ public:
 
 private:
   char cur_instruction() const noexcept;
+  char getCell(int x, int y) const noexcept;
   void push(double val);
   double pop();
   std::optional<double> &reg();
@@ -78,8 +81,8 @@ private:
   std::pair<int, int> direction = {1, 0};
   bool completed = false;
   StringMode stringMode = StringMode::OFF;
-  std::ostream &output;
-  std::istream &input;
+  std::string output;
+  std::string input;
   std::mt19937 gen;
 };
 

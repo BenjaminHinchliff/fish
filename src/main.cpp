@@ -53,21 +53,24 @@ void renderStacks(const Fish::stacks_t &stacks) {
   }
 }
 
-void renderDebugger(const Fish &fish, const std::stringstream &input, const std::stringstream &output) {
+void renderDebugger(const Fish &fish) {
   move(0, 0);
   clear();
   renderGrid(fish);
   renderStacks(fish.getStacks());
   printw("Input:\n");
-  std::string inputString = input.str();
-  printw("%s\n", inputString.c_str());
-  std::string outputString = output.str();
+  std::string input = fish.getInput();
+  for (int i = input.size() - 1; i >= 0; --i) {
+    addch(input[i]);
+  }
+  addch('\n');
   printw("Output:\n");
+  const std::string &output = fish.getOutput();
   constexpr size_t seg = 500;
-  size_t len = outputString.length();
+  size_t len = output.length();
   size_t loops = len != 0 ? ((len - 1) / seg) + 1 : 1;
   for (size_t i = 0; i < loops; ++i) {
-    printw(outputString.substr(i * seg, seg).c_str());
+    printw(output.substr(i * seg, seg).c_str());
   }
   addch('\n');
   refresh();
@@ -79,12 +82,12 @@ int main(int argc, char **argv) {
 
   std::string source;
   std::string sourceFilePath;
-  std::string inputStr;
+  std::string input;
   options.add_options()("h,help", "Print usage")(
       "c,code", "Source code", cxxopts::value<std::string>(source))(
       "s,source", "Source file", cxxopts::value<std::string>(sourceFilePath),
       "SOURCE")("i,inputStr", "text inputStr into the program",
-                cxxopts::value<std::string>(inputStr));
+                cxxopts::value<std::string>(input));
 
   options.parse_positional({"source"});
 
@@ -119,14 +122,11 @@ int main(int argc, char **argv) {
   nodelay(stdscr, true);
   keypad(stdscr, true);
 
-  std::stringstream input;
-  input << inputStr;
-
-  std::stringstream output;
+  std::string output;
   Fish fish(source, input, output);
 
   // first render
-  renderDebugger(fish, input, output);
+  renderDebugger(fish);
 
   chrono::milliseconds delay(200);
   constexpr chrono::milliseconds deltaDelay(10);
@@ -141,7 +141,7 @@ int main(int argc, char **argv) {
     if ((shouldntBlock && duration > delay) || shouldRender) {
       shouldRender = false;
       lastTime = now;
-      renderDebugger(fish, input, output);
+      renderDebugger(fish);
       fish.step();
     }
 
