@@ -5,7 +5,7 @@
 #include <functional>
 #include <map>
 #include <optional>
-#include <ostream>
+#include <iostream>
 #include <random>
 #include <stdexcept>
 #include <string>
@@ -19,7 +19,7 @@ struct FishStack {
 
 class Fish {
 public:
-  Fish(const std::string &source, std::ostream &output);
+  Fish(const std::string &source, std::istream &input, std::ostream &output);
 
   using stacks_t = std::vector<FishStack>;
 
@@ -79,6 +79,7 @@ private:
   bool completed = false;
   StringMode stringMode = StringMode::OFF;
   std::ostream &output;
+  std::istream &input;
   std::mt19937 gen;
 };
 

@@ -53,13 +53,14 @@ void renderStacks(const Fish::stacks_t &stacks) {
   }
 }
 
-void renderDebugger(const Fish &fish, std::stringstream &output) {
+void renderDebugger(const Fish &fish, const std::stringstream &input, const std::stringstream &output) {
   move(0, 0);
   clear();
   renderGrid(fish);
-  refresh();
   renderStacks(fish.getStacks());
-  refresh();
+  printw("Input:\n");
+  std::string inputString = input.str();
+  printw("%s\n", inputString.c_str());
   std::string outputString = output.str();
   printw("Output:\n");
   constexpr size_t seg = 500;
@@ -78,10 +79,12 @@ int main(int argc, char **argv) {
 
   std::string source;
   std::string sourceFilePath;
+  std::string inputStr;
   options.add_options()("h,help", "Print usage")(
       "c,code", "Source code", cxxopts::value<std::string>(source))(
       "s,source", "Source file", cxxopts::value<std::string>(sourceFilePath),
-      "SOURCE");
+      "SOURCE")("i,inputStr", "text inputStr into the program",
+                cxxopts::value<std::string>(inputStr));
 
   options.parse_positional({"source"});
 
@@ -116,11 +119,14 @@ int main(int argc, char **argv) {
   nodelay(stdscr, true);
   keypad(stdscr, true);
 
+  std::stringstream input;
+  input << inputStr;
+
   std::stringstream output;
-  Fish fish(source, output);
+  Fish fish(source, input, output);
 
   // first render
-  renderDebugger(fish, output);
+  renderDebugger(fish, input, output);
 
   chrono::milliseconds delay(200);
   constexpr chrono::milliseconds deltaDelay(10);
@@ -135,7 +141,7 @@ int main(int argc, char **argv) {
     if ((shouldntBlock && duration > delay) || shouldRender) {
       shouldRender = false;
       lastTime = now;
-      renderDebugger(fish, output);
+      renderDebugger(fish, input, output);
       fish.step();
     }
 

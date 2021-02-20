@@ -1,6 +1,7 @@
 #include "fish.hpp"
 
-Fish::Fish(const std::string &source, std::ostream &output) : output(output) {
+Fish::Fish(const std::string &source, std::istream &input, std::ostream &output)
+    : input(input), output(output) {
   std::random_device rd;
   gen = std::mt19937(rd());
   grid = split(source, "\n");
