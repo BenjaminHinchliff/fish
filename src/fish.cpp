@@ -35,19 +35,19 @@ char Fish::cur_instruction() const noexcept {
   }
 }
 
-void Fish::push(int val) { stacks.back().stack.push_back(val); }
+void Fish::push(double val) { stacks.back().stack.push_back(val); }
 
-int Fish::pop() {
+double Fish::pop() {
   auto &stack = stacks.back();
   if (stack.stack.empty()) {
     throw std::runtime_error("unexpected end of stack");
   }
-  int ret = stack.stack.back();
+  double ret = stack.stack.back();
   stack.stack.pop_back();
   return ret;
 }
 
-std::optional<int> &Fish::reg() { return stacks.back().reg; }
+std::optional<double> &Fish::reg() { return stacks.back().reg; }
 
 void Fish::move() {
   position.first = pos_modulo(position.first + direction.first, size.first);
@@ -96,8 +96,8 @@ void Fish::handle_instruction(char instruction) {
   // test for operators
   auto ops_it = operators.find(instruction);
   if (ops_it != operators.end()) {
-    int y = pop();
-    int x = pop();
+    double y = pop();
+    double x = pop();
     push(ops_it->second(x, y));
     return;
   }
@@ -105,7 +105,7 @@ void Fish::handle_instruction(char instruction) {
   // miscellaneous instructions
   switch (instruction) {
   case ':': {
-    int val = pop();
+    double val = pop();
     push(val);
     push(val);
   } break;
@@ -118,8 +118,8 @@ void Fish::handle_instruction(char instruction) {
     }
     break;
   case '$': {
-    int a = pop();
-    int b = pop();
+    double a = pop();
+    double b = pop();
     push(a);
     push(b);
   } break;
@@ -127,9 +127,9 @@ void Fish::handle_instruction(char instruction) {
     completed = true;
     break;
   case '.': {
-    int y = pop();
-    int x = pop();
-    position = std::make_pair(x, y);
+    double y = pop();
+    double x = pop();
+    position = std::make_pair(static_cast<int>(x), static_cast<int>(y));
   } break;
   case 'x': {
     std::uniform_int_distribution<> dis(0, 3);
@@ -142,13 +142,13 @@ void Fish::handle_instruction(char instruction) {
     std::reverse(stack.begin(), stack.end());
   } break;
   case 'l':
-    push(static_cast<int>(stacks.back().stack.size()));
+    push(static_cast<double>(stacks.back().stack.size()));
     break;
   case '!':
     move();
     break;
   case '?': {
-    int value = pop();
+    double value = pop();
     if (value == 0) {
       move();
     }
@@ -157,7 +157,7 @@ void Fish::handle_instruction(char instruction) {
     output << pop();
     break;
   case 'o': {
-    int value = pop();
+    double value = pop();
     // TODO: bounds check
     output << static_cast<char>(value);
   } break;
@@ -203,10 +203,11 @@ const Fish::mirrors_t Fish::mirrors = {
      }}};
 
 const Fish::operators_t Fish::operators = {
-    {'+', [](int x, int y) { return x + y; }},
-    {'-', [](int x, int y) { return x - y; }},
-    {'*', [](int x, int y) { return x * y; }},
-    {'%', [](int x, int y) { return x % y; }}};
+    {'+', [](double x, double y) { return x + y; }},
+    {'-', [](double x, double y) { return x - y; }},
+    {'*', [](double x, double y) { return x * y; }},
+    {'%', [](double x, double y) { return fmod(x, y); }},
+    {',', [](double x, double y) { return x / y; }}};
 
 const std::map<char, Fish::StringMode> Fish::modeMap = {
     {'\'', Fish::StringMode::SINGLE_QUOTE},

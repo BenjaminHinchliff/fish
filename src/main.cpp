@@ -1,8 +1,8 @@
 ﻿#include <chrono>
+#include <fstream>
 #include <iostream>
 #include <sstream>
 #include <thread>
-#include <fstream>
 
 #include <curses.h>
 #include <cxxopts.hpp>
@@ -32,19 +32,24 @@ void renderStacks(const Fish::stacks_t &stacks) {
     const auto &stack = fishStack.stack;
     printw("%d: [", i);
     if (stack.size() > 0) {
+      std::stringstream ss;
       for (size_t i = 0; i < stack.size() - 1; ++i) {
-        printw("%d, ", stack[i]);
+        ss << stack[i] << ", ";
       }
-      printw("%d", stack[stack.size() - 1]);
+      ss << stack[stack.size() - 1];
+      std::string ssStr = ss.str();
+      printw(ssStr.c_str());
     }
     printw("] reg: ");
     const auto &reg = fishStack.reg;
+    std::stringstream ss;
     if (reg.has_value()) {
-      printw("%d", *reg);
+      ss << *reg;
     } else {
-      printw("None");
+      ss << "None";
     }
-    addch('\n');
+    std::string ssStr = ss.str();
+    printw("%s\n", ssStr.c_str());
   }
 }
 
@@ -64,8 +69,10 @@ int main(int argc, char **argv) {
 
   std::string source;
   std::string sourceFilePath;
-  options.add_options()("h,help", "Print usage")("c,code", "Source code", cxxopts::value<std::string>(source))(
-      "s,source", "Source files", cxxopts::value<std::string>(sourceFilePath), "SOURCE");
+  options.add_options()("h,help", "Print usage")(
+      "c,code", "Source code", cxxopts::value<std::string>(source))(
+      "s,source", "Source file", cxxopts::value<std::string>(sourceFilePath),
+      "SOURCE");
 
   options.parse_positional({"source"});
 
@@ -110,12 +117,14 @@ int main(int argc, char **argv) {
   constexpr chrono::milliseconds deltaDelay(10);
   auto lastTime = Clock::now();
   const auto &grid = fish.getGrid();
-  bool shouldNoDelay = true;
+  bool shouldntBlock = true;
+  bool shouldRender = false;
   bool userEnd = false;
   while (!fish.isCompleted() && !userEnd) {
     auto now = Clock::now();
     auto duration = now - lastTime;
-    if (duration > delay || !shouldNoDelay) {
+    if ((shouldntBlock && duration > delay) || shouldRender) {
+      shouldRender = false;
       lastTime = now;
       renderDebugger(fish, output);
       fish.step();
@@ -136,8 +145,11 @@ int main(int argc, char **argv) {
       delay -= deltaDelay;
       break;
     case 's':
-      shouldNoDelay = !shouldNoDelay;
-      nodelay(stdscr, shouldNoDelay);
+      shouldntBlock = !shouldntBlock;
+      nodelay(stdscr, shouldntBlock);
+      break;
+    case ' ':
+      shouldRender = true;
       break;
     case KEY_EXIT:
     case 'q':

@@ -11,8 +11,8 @@
 #include <optional>
 
 struct FishStack {
-  std::vector<int> stack;
-  std::optional<int> reg;
+  std::vector<double> stack;
+  std::optional<double> reg;
 };
 
 class Fish {
@@ -30,15 +30,16 @@ public:
 
 private:
   char cur_instruction() const noexcept;
-  void push(int val);
-  int pop();
-  std::optional<int> &reg();
+  void push(double val);
+  double pop();
+  std::optional<double> &reg();
   void move();
   void handle_instruction(char instruction);
 
   constexpr int pos_modulo(int i, int n) const noexcept {
     return (i % n + n) % n;
   }
+
   std::vector<std::string> split(const std::string &source,
                                  const std::string &delim);
 
@@ -51,7 +52,7 @@ private:
                std::function<std::pair<int, int>(const std::pair<int, int> &)>>;
   static const mirrors_t mirrors;
 
-  using operators_t = std::map<char, std::function<int(int, int)>>;
+  using operators_t = std::map<char, std::function<double(double, double)>>;
   static const operators_t operators;
 
   enum class StringMode {
